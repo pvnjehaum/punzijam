@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>商品列表</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/list.css">
+</head>
+
+<body>
+  <div class="header container">
+    仿站电商 · 商品列表
+    <p style="display: block;">      
+      <a href="./main.html">回到首页</a>
+    </p>
+  </div>
+
+  <div class="filter container">
+    <div class="cateBox">
+      <p>分类</p>
+      <ul class="category">
+        <!-- js渲染 -->
+        <li class="active" data-id="">全部</li>
+        <li data-id="手机">手机</li>
+        <li data-id="衣服">衣服</li>
+        <li data-id="帽子">帽子</li>
+        <li data-id="电脑">电脑</li>
+        <li data-id="袜子">袜子</li>
+        <li data-id="裤子">裤子</li>
+      </ul>
+    </div>
+    <div class="cateBox">
+      <p>筛选</p>
+      <ul class="filterBox">
+        <li data-type='' class="active">全部</li>
+        <li data-type='hot'>热销</li>
+        <li data-type='sale'>折扣</li>
+      </ul>
+    </div>
+    <div class="cateBox">
+      <p>折扣</p>
+      <ul class="filterBox saleBox">
+        <li data-type="" class="active">全部</li>
+        <li data-type="0.5">5折</li>
+        <li data-type="0.6">6折</li>
+        <li data-type="0.7">7折</li>
+        <li data-type="0.8">8折</li>
+        <li data-type="0.9">9折</li>
+      </ul>
+    </div>
+    
+    <div class="cateBox">
+      <p>排序</p>
+      <ul class="filterBox sortBox">
+        <li data-type="id" data-method="ASC" class="active">综合 正序</li>
+        <li data-type="id" data-method="DESC">综合 倒序</li>
+        <li data-type="sale" data-method="ASC">折扣 正序</li>
+        <li data-type="sale" data-method="DESC">折扣 倒序</li>
+        <li data-type="price" data-method="ASC">价格 正序</li>
+        <li data-type="price" data-method="DESC">价格 倒序</li>
+      </ul>
+    </div>
+    <div class="cateBox">
+      <p>搜索</p>
+      <input type="text" class="search">
+    </div>
+  </div>
+
+  <div class="pagination container">
+    <span class="first disable">首页</span>
+    <span class="prev disable">上一页</span>
+    <p class="total">1 / 10</p>
+    <span class="next">下一页</span>
+    <span class="last">末页</span>
+    <input type="number" class="jump" value="1"><button class="go">跳转</button>
+    <select class="pagesize">
+      <option value="12">12</option>
+      <option value="16">16</option>
+      <option value="20">20</option>
+      <option value="24">24</option>
+    </select>
+  </div>
+
+  <ul class="list container">
+    
+    <!-- js渲染的数据 -->
+    <li data-id="袜子">
+      <div class="show">
+        <img src="https://image4.suning.cn/uimg/b2c/newcatentries/0070081143-000000000131021736_2_800x800.jpg">
+        <span class="hot">热销</span>
+        <span>折扣</span>
+      </div>
+      <div class="info">
+        <p class="title">南极人 【5双礼盒装】男士袜子中筒棉袜四季商务袜透气袜子男P3014</p>
+        <p class="price">
+          <span class="curr">¥ 17.40</span>
+          <span class="old">¥ 29.00</span>
+        </p>        
+      </div>
+    </li>
+  </ul>
+  <div class="footer container">页面底部</div>
+</body>
+
+<script>
+    // 示例商品数据
+    const products = [
+    {
+      id: 1,
+      category:'袜子',
+      image: "https://image4.suning.cn/uimg/b2c/newcatentries/0070081143-000000000131021736_2_800x800.jpg",
+      title: "南极人 【5双礼盒装】男士袜子中筒棉袜四季商务袜透气袜子男P3014",
+      hot: true,
+      discount: 0.6,
+      currPrice: "17.40",
+      oldPrice: "29.00"
+    },
+    {
+      id: 2,
+      category:'帽子',
+      image: "https://img.alicdn.com/bao/uploaded/i1/679916139/O1CN01gkYINk1vDiE7erx8e_!!679916139.jpg_580x580q90.jpg_.webp", 
+      title: "Aouu Lee明星同款鸭舌帽男女韩版帽子适合大头围大脸纯色棒球帽潮",
+      hot: true,
+      discount: false,
+      currPrice: "100.00",
+      oldPrice: "100.00"
+    },
+    {
+      id: 3,
+      category:'手机',
+      image: "https://img.alicdn.com/imgextra/i3/2078223512/O1CN014gBecH1boXvsDd2qp_!!2078223512-0-alimamacc.jpg_580x580q90.jpg_.webp",
+      title: "【官方旗舰店】2024正品新款5G智能手机全网通双卡大内存6.5寸超薄刘海屏游戏学生直播电竞备用老人便宜手机",
+      hot: true,
+      discount: 0.5,
+      currPrice: "150.00",
+      oldPrice: "300.00"
+    },
+    {
+      id: 4,
+      category:'衣服',
+      image: "https://img.alicdn.com/imgextra/i3/96379084/O1CN01kNwZ3M2GyWoF7xnbf_!!0-saturn_solar.jpg_360x360q90.jpg_.webp",
+      title: "夏季套装男短袖t恤宽松搭配工装短裤冰丝两件装潮牌休闲穿搭男生",
+      hot: true,
+      discount: 0.7,
+      currPrice: "91.00",
+      oldPrice: "130.00"
+    },
+    {
+      id: 5,
+      category:'裤子',
+      image: "https://g-search3.alicdn.com/img/bao/uploaded/i4/i1/3937219703/O1CN01E12JU62LY1zTiQoqN_!!3937219703-0-C2M.jpg_580x580q90.jpg_.webp",
+      title: "冰丝裤子男士夏季薄款2024新款直筒阔腿休闲长裤男生运动束脚卫裤",
+      hot: true,
+      discount: 0.7,
+      currPrice: "42.00",
+      oldPrice: "60.00"
+    },
+    {
+      id: 6,
+      category:'电脑',
+      image: "https://img.alicdn.com/imgextra/i3/2891951486/O1CN01XDhBy01MqdSBAs42T_!!2891951486-0-alimamacc.jpg_580x580q90.jpg_.webp",
+      title: "【2024新品英特尔酷睿i9】笔记本电脑戴睿2.5K超清IPS屏电脑轻薄商务办公学生网课设计电竞游戏本官方正品",
+      hot: true,
+      discount: 0.8,
+      currPrice: "1120.00",
+      oldPrice: "1400.00"
+    },
+    {
+      id: 7,
+      category:'电脑',
+      image: "https://g-search1.alicdn.com/img/bao/uploaded/i4/i4/1906285311/O1CN01rH2jwg1p6USh6Kl6U_!!1906285311.jpg_580x580q90.jpg_.webp",
+      title: "联想LENOVO原装电脑台式主机i5 i7独显商务家用办公设计全套整机",
+      hot: true,
+      discount: false,
+      currPrice: "450.00",
+      oldPrice: "450.00"
+    },
+    {
+      id: 8,
+      category:'手机',
+      image: "https://img.alicdn.com/imgextra/i4/347690015/O1CN01oCl5Uh1ByutJrEGHW_!!0-saturn_solar.jpg_580x580q90.jpg_.webp",
+      title: "【咨询全店5折起】VERTU纬图 Signature十二生肖唐卡4G款高端总裁黄金手机新款官方正品 威图vertu限量版手机",
+      hot: false,
+      discount: 0.9,
+      currPrice: "270000.00",
+      oldPrice: "300000.00"
+    },
+    
+  ];
+  // 获取商品列表容器
+  const productListContainer = document.querySelector('.list.container');
+
+  // 渲染商品列表的函数
+  function renderProducts(products) {
+    // 清空现有列表
+    productListContainer.innerHTML = '';
+
+    // 商品列表渲染函数
+function renderProducts(products) {
+  const productListContainer = document.querySelector('.list.container');
+  productListContainer.innerHTML = ''; // 清空当前商品列表
+  products.forEach(product => {
+    const productHtml = `
+      <li data-id="${product.id}">
+        <div class="show">
+          <img src="${product.image}" alt="${product.title}">
+          ${product.hot ? '<span class="hot">热销</span>' : ''}
+          ${product.discount ? `<span class="discount">折扣</span>` : ''}
+        </div>
+        <div class="info">
+          <p class="title">${product.title}</p>
+          <p class="price">
+            <span class="curr">¥ ${product.currPrice}</span>
+            <span class="old">¥ ${product.oldPrice}</span>
+          </p>        
+        </div>
+      </li>
+    `;
+    productListContainer.innerHTML += productHtml;
+  });
+}}
+  document.addEventListener('DOMContentLoaded', function() {
+    renderProducts(products);
+  });
+  // 当前页码
+  let currentPage = 1;
+  // 每页显示的商品数量
+  let productsPerPage = 12;
+  // 总页数
+  let totalPages = Math.ceil(products.length / productsPerPage);
+
+  // 获取页面上的元素
+  let categoryList = document.querySelector('.category');
+  let filterBox = document.querySelector('.filterBox');
+  let saleBox = document.querySelector('.saleBox');
+  let sortBox = document.querySelector('.sortBox');
+  let searchInput = document.querySelector('.search');
+  let paginationTotal = document.querySelector('.total');
+  let firstPageBtn = document.querySelector('.first');
+  let prevPageBtn = document.querySelector('.prev');
+  let nextPageBtn = document.querySelector('.next');
+  let lastPageBtn = document.querySelector('.last');
+  let goBtn = document.querySelector('.go');
+  let jumpInput = document.querySelector('.jump');
+  let pagesizeSelect = document.querySelector('.pagesize');
+
+  function updatePagination() {
+    paginationTotal.textContent = `${currentPage} / ${totalPages}`;
+    // 根据当前页码禁用或启用按钮
+    firstPageBtn.classList.add('disable');
+    prevPageBtn.classList.add('disable');
+    if (currentPage > 1) {
+      firstPageBtn.classList.remove('disable');
+      prevPageBtn.classList.remove('disable');
+    }
+    nextPageBtn.classList.add('disable');
+    lastPageBtn.classList.add('disable');
+    if (currentPage < totalPages) {
+      nextPageBtn.classList.remove('disable');
+      lastPageBtn.classList.remove('disable');
+    }
+  }
+
+
+// 设置所有事件监听器的函数
+function setupEventListeners() {
+  // 设置分页事件监听器
+  firstPageBtn.addEventListener('click', () => goToPage(1));
+  prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
+  nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+  lastPageBtn.addEventListener('click', () => goToPage(totalPages));
+  goBtn.addEventListener('click', () => goToPage(parseInt(jumpInput.value, 10)));
+  jumpInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') goToPage(parseInt(this.value, 10));
+  });
+  pagesizeSelect.addEventListener('change', () => {
+    productsPerPage = parseInt(this.value, 10);
+    currentPage = 1;
+    renderProducts(getProductsForCurrentPage());
+    updatePagination();
+  });
+
+  // 设置筛选事件监听器
+  filterBox.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LI') {
+      const filterType = e.target.dataset.type;
+      filterProducts(filterType);
+    }
+  });
+
+  // 设置折扣事件监听器
+  saleBox.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LI') {
+      const discountType = e.target.dataset.type;
+      filterProductsByDiscount(discountType);
+    }
+  });
+
+  // 设置排序事件监听器
+  sortBox.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LI') {
+      const sortBy = e.target.dataset.type;
+      const sortMethod = e.target.dataset.method;
+      sortProducts(sortBy, sortMethod);
+    }
+  });
+
+  // 设置分类筛选事件监听器
+  setupCategoryEventListeners();
+
+  // 设置搜索事件监听器
+  searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value;
+    searchProducts(searchTerm);
+  });
+ // 筛选按钮事件
+ const filterButtons = document.querySelectorAll('.filterBox li');
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // 移除其他筛选按钮的 active 类
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      // 执行筛选逻辑
+      const filterType = this.dataset.type;
+      filterProducts(filterType);
+    });
+  });
+
+  // 折扣按钮事件
+const saleButtons = document.querySelectorAll('.saleBox li[data-type="sale"]');
+saleButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // 移除其他筛选按钮的 active 类
+    document.querySelectorAll('.saleBox li').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+
+    // 执行折扣筛选逻辑，显示所有有折扣的商品
+    const filteredProducts = products.filter(product => product.discount < 1 && product.discount > 0);
+    renderProducts(filteredProducts);
+  });
+});
+
+  // 排序按钮事件
+  const sortButtons = document.querySelectorAll('.sortBox li');
+  sortButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // 移除其他排序按钮的 active 类
+      sortButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      // 执行排序逻辑
+      const sortBy = this.dataset.type;
+      const sortMethod = this.dataset.method;
+      sortProducts(sortBy, sortMethod);
+    });
+  });
+
+  // 分类按钮事件
+  setupCategoryEventListeners();
+}
+
+
+// 筛选商品的函数，根据商品分类筛选
+function filterProducts(filterType) {
+  // 如果筛选类型是空字符串，显示所有商品
+  if (filterType === '') {
+    renderProducts(products);
+    return;
+  }
+
+  // 否则，根据筛选类型过滤商品
+  const filteredProducts = products.filter(product => {
+    return product.category === filterType;
+  });
+
+  // 渲染筛选后的商品列表或显示“没有商品”的图片
+  renderProducts(filteredProducts);
+}
+
+// 根据折扣筛选商品的 filterProductsByDiscount 函数 ...
+  // 根据折扣筛选商品的函数
+  function filterProductsByDiscount(discountType) {
+  let filteredProducts;
+  if (discountType === '') {
+    // 如果 discountType 为空字符串，显示所有商品
+    filteredProducts = products;
+  } else if (discountType === 'hasDiscount') {
+    // 筛选有折扣的商品
+    filteredProducts = products.filter(product => product.discount && product.discount < 1);
+  } else if (discountType === 'noDiscount') {
+    // 筛选无折扣的商品
+    filteredProducts = products.filter(product => !product.discount || product.discount === 1);
+  } else {
+    // 按具体折扣筛选商品
+    const discountRate = parseFloat(discountType);
+    filteredProducts = products.filter(product => product.discount === discountRate);
+  }
+
+  // 调用渲染函数重新渲染商品列表
+  renderProducts(filteredProducts);
+}
+
+
+// 根据排序方式排序商品的 sortProducts 函数 ...
+function sortProducts(sortBy, sortMethod) {
+  // 对 products 进行排序
+  const sortedProducts = products.slice().sort((a, b) => {
+    if (sortMethod === 'ASC') {
+      return a[sortBy] - b[sortBy];
+    } else {
+      return b[sortBy] - a[sortBy];
+    }
+  });
+  renderProducts(sortedProducts);
+}
+
+// 确保在文档加载完成后设置事件监听器并初始化页面
+document.addEventListener('DOMContentLoaded', function() {
+  renderProducts(products); // 初始渲染所有商品
+  updatePagination();
+  setupEventListeners();
+});
+
+// 当DOM内容完全加载后
+document.addEventListener('DOMContentLoaded', function() {
+  // 初始化渲染商品列表、分页和事件监听器
+  renderProducts(getProductsForCurrentPage());
+  updatePagination();
+  setupEventListeners();
+});
+
+// 辅助函数：根据当前页码和每页商品数获取当前页的商品
+function getProductsForCurrentPage() {
+  const startIndex = (currentPage - 1) * productsPerPage;
+  return products.slice(startIndex, startIndex + productsPerPage);
+}
+
+  // 搜索商品的函数
+function searchProducts(searchTerm) {
+  // 将搜索词转换为小写，以实现不区分大小写的搜索
+  const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+  // 使用过滤函数找出商品标题中包含搜索词的商品
+  const filteredProducts = products.filter(product => {
+    // 同样将商品标题转换为小写进行比较
+    return product.title.toLowerCase().includes(lowerCaseSearchTerm);
+  });
+
+  // 重新渲染商品列表，传入过滤后的商品数组
+  renderProducts(filteredProducts);
+}
+// 当DOM完全加载后，调用 renderProducts 函数渲染商品列表
+document.addEventListener('DOMContentLoaded', function() {
+  renderProducts(products);
+  setupEventListeners();
+});
+
+
+// 筛选和排序函数
+function setupEventListeners() {
+  // 分类筛选
+  document.querySelectorAll('.category li').forEach(button => {
+    button.addEventListener('click', function() {
+      document.querySelectorAll('.category li').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      filterProducts(this.dataset.id);
+    });
+  });
+
+  // 筛选：热销或折扣
+  document.querySelectorAll('.filterBox li').forEach(button => {
+    button.addEventListener('click', function() {
+      document.querySelectorAll('.filterBox li').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      const type = this.dataset.type;
+      const filteredProducts = products.filter(product => {
+        return type === '' || product[type];
+      });
+      renderProducts(filteredProducts);
+    });
+  });
+
+  // 折扣筛选
+  document.querySelectorAll('.saleBox li').forEach(button => {
+    button.addEventListener('click', function() {
+      document.querySelectorAll('.saleBox li').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      filterProductsByDiscount(this.dataset.type);
+    });
+  });
+
+  // 排序功能
+  document.querySelectorAll('.sortBox li').forEach(button => {
+    button.addEventListener('click', function() {
+      document.querySelectorAll('.sortBox li').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      sortProducts(this.dataset.type, this.dataset.method);
+    });
+  });
+}
+
+// 初始化和渲染函数
+document.addEventListener('DOMContentLoaded', function() {
+  renderProducts(products);
+  setupEventListeners();
+});
+
+
+
+// 为搜索输入框添加事件监听器
+searchInput.addEventListener('input', function() {
+  // 每次用户输入时，调用 searchProducts 函数进行搜索
+  searchProducts(this.value);
+});
+
+  // 初始化渲染
+  renderProducts();
+  updatePagination();
+  setupEventListeners();
+
+  // 当DOM内容完全加载后
+document.addEventListener('DOMContentLoaded', function() {
+  updatePagination();
+  initEventListeners();
+});
+
+// 初始化事件监听器
+function initEventListeners() {
+  setupCategoryEventListeners();
+  setupEventListeners();
+}
+
+
+function renderProducts(products) {
+  // 检查是否有商品可渲染
+  if (products.length === 0) {
+    // 如果没有商品，显示“没有商品”的图片
+    const noProductsHtml = `<img src="./img/no.png" alt="没有商品">`;
+    productListContainer.innerHTML = noProductsHtml;
+  } else {
+    // 如果有商品，生成商品列表的 HTML 并渲染到页面
+    const productsHtml = products.map(product => {
+      return`
+        <li data-id="${product.id}">
+          <div class="show">
+            <img src="${product.image}" alt="${product.title}">
+            ${product.hot ? `<span class="hot">热销</span>` : ''}
+            ${product.discount ? `<span>折扣</span>` : ''}
+          </div>
+          <div class="info">
+            <p class="title">${product.title}</p>
+            <p class="price">
+              <span class="curr">¥ ${product.currPrice}</span>
+              <span class="old">¥ ${product.oldPrice}</span>
+            </p>
+          </div>
+        </li>
+      `;
+    }).join('');
+    productListContainer.innerHTML = productsHtml;
+  }
+}
+
+// 为分类按钮添加点击事件
+function setupCategoryEventListeners() {
+  const categoryButtons = document.querySelectorAll('.category li');
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // 移除其他分类按钮的 active 类
+      categoryButtons.forEach(btn => btn.classList.remove('active'));
+      // 为当前按钮添加 active 类
+      this.classList.add('active');
+      // 获取当前按钮的分类 ID
+      const filterType = this.getAttribute('data-id');
+      // 调用 filterProducts 函数进行筛选
+      filterProducts(filterType || '');
+    });
+  });
+}
+
+function sortProducts(sortBy, sortMethod) {
+  const sortedProducts = [...products].sort((a, b) => {
+    let comparison = 0;
+    if (sortBy === 'sale') {
+      // 对折扣进行排序
+      comparison = a.discount - b.discount;
+    } else if (sortBy === 'price') {
+      // 对价格进行排序
+      comparison = parseFloat(a.currPrice) - parseFloat(b.currPrice);
+    }
+    if (sortMethod === 'DESC') comparison *= -1; // 倒序
+    return comparison;
+  });
+  renderProducts(sortedProducts);
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderProducts(products); // 初始加载显示所有产品
+});
+
+
+// 页面加载完成后，初始化分类事件监听器
+document.addEventListener('DOMContentLoaded', function() {
+  setupCategoryEventListeners();
+});
+
+</script>
+
+
+
+
+</html>

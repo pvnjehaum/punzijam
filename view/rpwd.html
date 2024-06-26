@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>修改密码</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/form.css">
+</head>
+<body>
+  <div class="header container">
+    修改密码
+    <p>
+      <a href="./index.html" id="homeLink">回到首页</a>
+    </p>
+  </div>
+  <div id="passwordFormContainer" style="display: none;">
+    <form id="passwordForm">
+      <span class="error" style="display: none;">修改密码错误！</span>
+      <label>
+        原始密码： <input type="password" class="oldpassword" required>
+      </label>
+      <label>
+        新密码： <input type="password" class="newpassword" required>
+      </label>
+      <label>
+        确认新密码： <input type="password" class="rnewpassword" required>
+      </label>
+      <button type="submit">确认修改</button>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // 检查登录状态
+      var userLoggedIn = localStorage.getItem('userLoggedIn');
+
+      if (!userLoggedIn) {
+        alert('请先登录！');
+        window.location.href = 'login.html';
+      } else {
+        $('#passwordFormContainer').show();
+      }
+
+      $('#passwordForm').submit(function(event) {
+        event.preventDefault();
+
+        var oldPassword = $('.oldpassword').val();
+        var newPassword = $('.newpassword').val();
+        var rNewPassword = $('.rnewpassword').val();
+        var passwordRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
+
+        $('.error').hide().text('');
+
+        if (!oldPassword || !newPassword || !rNewPassword) {
+          $('.error').text('所有字段都不能为空！').show();
+          return;
+        }
+
+        if (!passwordRegex.test(newPassword)) {
+          $('.error').text('新密码格式不正确，必须包含字母和数字！').show();
+          return;
+        }
+
+        if (newPassword !== rNewPassword) {
+          $('.error').text('两次输入的新密码不一致！').show();
+          return;
+        }
+
+        alert('密码修改成功！');
+        $('#passwordForm')[0].reset();
+      });
+    });
+  </script>
+</body>
+</html>

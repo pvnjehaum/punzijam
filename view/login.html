@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>登录页面</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/form.css">
+</head>
+<body>
+  <div class="header container">登录页面</div>
+  <form class="login-form">
+    <span class="error" style="display: none;">用户名或密码错误！</span>
+    <label>
+      用户名：<input type="text" name="username" class="username" required>
+    </label>
+    <label>
+      密&nbsp;&nbsp;&nbsp;码：<input type="password" name="password" class="password" required>
+    </label>
+    <p>还没账号，<a href="./register.html">去注册</a></p>
+    <button type="submit">登录</button>
+  </form>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var $loginForm = $('.login-form'); // 使用jQuery选择器获取登录表单
+      var $errorMessage = $('.error'); // 获取错误消息显示元素
+
+      $loginForm.on('submit', function(event) {
+        event.preventDefault(); // 阻止表单的默认提交行为
+        $errorMessage.hide(); // 隐藏错误消息
+
+        var username = $('.username').val().trim(); // 获取并处理用户名
+        var password = $('.password').val().trim(); // 获取并处理密码
+
+        if (!username || !password) {
+          $errorMessage.text('用户名或密码不能为空！').show(); // 显示错误消息
+          return;
+        }
+
+        $.ajax({
+          url: '/api/login', // 请求的URL
+          type: 'POST', // 请求类型
+          contentType: 'application/json', // 发送信息至服务器时内容编码类型
+          data: JSON.stringify({ username: username, password: password }), // 将对象转换为JSON字符串
+          success: function(data) { // 请求成功后的回调函数
+            if (data.success) {
+              alert('登录成功！');
+              window.location.href = 'main.html'; // 登录成功后重定向到主页
+            } else {
+              $errorMessage.text(data.message || '用户名或密码错误！').show(); // 显示从服务器返回的错误消息
+            }
+          },
+          error: function() { // 请求失败的回调函数
+            $errorMessage.text('登录请求失败，请稍后重试！').show(); // 显示错误消息
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

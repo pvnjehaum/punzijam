@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>注册页面</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/form.css">
+</head>
+<body>
+  <div class="header container">注册页面</div>
+  <form id="registerForm">
+    <span class="error" style="display: none;">错误消息</span>
+    <label>
+      用户名：&nbsp;&nbsp; <input type="text" id="username" required>
+    </label>
+    <label>
+      密&nbsp;&nbsp;&nbsp;码：&nbsp;&nbsp;<input type="password" id="password" required>
+    </label>
+    <label>
+      确认密码：&nbsp;&nbsp;<input type="password" id="confirmPassword" required>
+    </label>
+    <label>
+      昵&nbsp;&nbsp;&nbsp;称：&nbsp;&nbsp; <input type="text" id="nickname" required>
+    </label>
+    <p>已有账号，<a href="./login.html">直接登录</a></p>
+    <button type="submit">注册</button>
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const form = document.getElementById('registerForm');
+      const errorSpan = document.querySelector('.error');
+
+      const showErrorMessage = message => {
+        errorSpan.textContent = message;
+        errorSpan.style.display = 'block';
+      };
+
+      const hideErrorMessage = () => {
+        errorSpan.style.display = 'none';
+      };
+
+      const validatePassword = password => {
+        return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(password);
+      };
+
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        hideErrorMessage();
+
+        let username = document.getElementById('username').value.trim();
+        let password = document.getElementById('password').value.trim();
+        let confirmPassword = document.getElementById('confirmPassword').value.trim();
+        let nickname = document.getElementById('nickname').value.trim();
+
+        if (!username || !password || !confirmPassword || !nickname) {
+          showErrorMessage('所有字段都不能为空！');
+          return;
+        }
+
+        if (!validatePassword(password)) {
+          showErrorMessage('密码必须包含至少一个数字和一个大写和小写字母，且长度为6-20个字符。');
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showErrorMessage('两次密码输入不一致！');
+          return;
+        }
+
+        try {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username, password, nickname})
+          });
+          const data = await response.json();
+
+          if (data.success) {
+            alert('注册成功！');
+            window.location.href = 'login.html';
+          } else {
+            showErrorMessage(data.message || '注册失败，请重试！');
+          }
+        } catch (error) {
+          console.error('注册请求失败:', error);
+          showErrorMessage('注册请求失败，请稍后重试！');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
